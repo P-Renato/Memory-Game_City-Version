@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useState, type ReactNode } from 'react';
 import { cityByLanguage } from '../lib/db.ts';
 
 type Language = keyof typeof cityByLanguage;
@@ -20,10 +20,4 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   );
 }
 
-export function useLanguage() {
-  const context = useContext(LanguageContext);
-  if (context === undefined) {
-    throw new Error('useLanguage must be used within a LanguageProvider');
-  }
-  return context;
-}
+export { LanguageContext }

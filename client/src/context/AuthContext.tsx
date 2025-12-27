@@ -1,21 +1,8 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useState, useEffect, type ReactNode } from 'react';
+import type { User, AuthContextType } from '../types/index'
 
-export interface User {
-  id: string;
-  username: string;
-  email: string;
-}
 
-export interface AuthContextType {
-  user: User | null;
-  loading: boolean;
-  login: (data: { login: string; password: string }) => Promise<void>;
-  logout: () => void;
-  isAuthenticated: boolean;
-  token: string | null;
-}
-
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
@@ -58,7 +45,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const login = async (loginData: { login: string; password: string }) => {
     setLoading(true);
     try {
-      const response = await fetch('/api/auth/login', {
+      const response = await fetch('/api/users/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(loginData),
@@ -85,7 +72,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const logout = async () => {
     clearStoredAuth();
-    fetch('/api/auth/logout').catch(console.error)
+    fetch('/api/users/logout').catch(console.error)
   };
 
   const value = {
@@ -104,10 +91,4 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   );
 }
 
-export function useAuth() {
-  const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
-}
+export { AuthContext }
