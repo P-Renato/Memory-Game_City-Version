@@ -5,7 +5,7 @@ import { getImagePath } from "../lib/utils/gameHelpers";
 import { useMemoryGame } from "../hooks/useMemoryGame";
 import { useAuth } from "../context/useAuth";
 import type { GameRoom } from "../types/index";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo } from "react";
 
 interface GameBoardProps {
   room?: GameRoom;
@@ -16,15 +16,9 @@ export default function GameBoard({ room, isMultiplayer = false }: GameBoardProp
   const { language } = useLanguage();
   const { user, loading: authLoading } = useAuth();
   const { gameState, handleCardClick } = useMemoryGame(language);
-  const [localUser, setLocalUser] = useState(user);
   
-  // Sync user when auth loading completes
-  useEffect(() => {
-    if (!authLoading && user) {
-      setLocalUser(user);
-      console.log("✅ User loaded in GameBoard:", user.id, user.username);
-    }
-  }, [user, authLoading]);
+  const localUser = useMemo(() => user, [user]);
+  
 
   // Multiplayer logic
   useEffect(() => {

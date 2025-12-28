@@ -11,6 +11,16 @@ export interface User {
   };
 }
 
+// JWT Payload
+export interface JwtPayload {
+  userId: string;
+  email: string;
+  username: string;
+  iat?: number;
+  exp?: number;
+}
+
+
 export interface LoginRequest {
     login: {
         email?: string;
@@ -35,3 +45,21 @@ export interface AuthResponse {
   token?: string;
   error?: string;
 }
+
+import type { 
+  GameRoom, 
+  GamePlayer, 
+  GameState, 
+  Card,
+  CreateRoomRequest,
+  CreateRoomResponse 
+} from '../../../shared/types'; 
+
+export type { 
+  GameRoom, 
+  GamePlayer, 
+  GameState, 
+  Card,
+  CreateRoomRequest,
+  CreateRoomResponse 
+};

@@ -49,7 +49,7 @@ export default function RoomCreationModal({
         username: user.username
       });
 
-      const response = await fetch('/api/rooms', {
+      const response = await fetch('http://localhost:3001/api/rooms/', {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',

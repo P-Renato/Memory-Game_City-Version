@@ -1,6 +1,5 @@
 import type { Request, Response, NextFunction } from "express";
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import { generateToken, verifyToken } from "../utils/auth";
 import type { RegisterRequest, LoginRequest } from "../types/types";
@@ -105,7 +104,7 @@ export const registerUser = async ( req: Request, res: Response, next: NextFunct
 
 export const loginUser = async (req: Request, res: Response, next: NextFunction) => {
     try {
-    console.log('Login attempt for email:', req.body.email);
+    console.log('Login attempt:', req.body);
     
     const { login, password }: LoginRequest = req.body;
 

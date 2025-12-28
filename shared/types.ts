@@ -1,10 +1,12 @@
+// shared/types.ts
 
+// Card interface - using number for id since that's what you have
 export interface Card {
-  id: number;           // Keep as number if that's what you're using
+  id: number;
   city: string;
   flipped: boolean;
   matched: boolean;
-  image?: string;       // Add if you need image paths
+  image?: string;
 }
 
 export interface GamePlayer {
@@ -15,7 +17,6 @@ export interface GamePlayer {
   isHost: boolean;
 }
 
-// Update GameState with missing properties:
 export interface GameState {
   cards: Card[];
   currentTurn: string;
@@ -25,7 +26,7 @@ export interface GameState {
   lastMove?: {
     userId: string;
     cardIndex: number;
-    cardId: number;     // Match your Card.id type (number)
+    cardId: number;
     timestamp: number;
   } | null;
 }
@@ -35,18 +36,19 @@ export interface GameRoom {
   name: string;
   host: string;
   players: GamePlayer[];
-  playerCount: number;
   maxPlayers: number;
-  gameState: GameState;
   status: 'waiting' | 'playing' | 'finished';
+  gameState: GameState;
   settings: {
     language: string;
+    cardCount: number;
     isPrivate: boolean;
   };
-  isFull: boolean;
-  createdAt: string;
+  createdAt: Date;
+  updatedAt?: Date;
 }
 
+// API Request/Response types
 export interface CreateRoomRequest {
   name: string;
   maxPlayers: number;
@@ -68,38 +70,16 @@ export interface GetRoomsResponse {
   error?: string;
 }
 
-export interface RoomServiceResponse {
-  success: boolean;
-  data?: unknown;
-  error?: string;
-}
-
-// Add for WebSocket later
-export interface WebSocketMessage {
-  type: string;
-  payload: unknown;
-  roomId?: string;
-  userId?: string;
-}
-
+// Auth types
 export interface User {
   id: string;
   username: string;
   email: string;
-  passwordHash: string;
-  createdAt: Date;
-  stats?: {
-    gamesPlayed: number;
-    wins: number;
-    bestScore: number;
-  };
 }
 
-export interface AuthContextType {
-  user: User | null;
-  loading: boolean;
-  login: (data: { login: string; password: string }) => Promise<void>;
-  logout: () => void;
-  isAuthenticated: boolean;
-  token: string | null;
+export interface AuthResponse {
+  success: boolean;
+  user?: User;
+  token?: string;
+  error?: string;
 }
