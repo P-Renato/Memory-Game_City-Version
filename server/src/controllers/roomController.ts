@@ -12,6 +12,16 @@ export const getAvailableRooms = async (req: Request, res: Response) => {
       success: true,
       rooms
     });
+
+    console.log('📊 Rooms returned:', {
+      count: rooms.length,
+      rooms: rooms.map(r => ({ id: r.id, name: r.name, players: r.players?.length }))
+    });
+
+    res.json({
+      success: true,
+      rooms
+    });
   } catch (error) {
     console.error('Error fetching available rooms:', error);
     res.status(500).json({
@@ -26,6 +36,8 @@ export const getRooms = async (req: Request, res: Response) => {
     console.log('📋 Fetching available rooms for user:', (req as AuthRequest).user?.userId);
     
     const rooms = await RoomService.getAllRooms();
+
+    
     
     res.json({
       success: true,

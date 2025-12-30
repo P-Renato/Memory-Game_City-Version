@@ -1,6 +1,4 @@
 
-// components/Header.tsx
-"use client";
 import { useState } from 'react';
 import { useLanguage } from '../context/useLanguage';
 import { useAuth } from '../context/useAuth';
@@ -8,19 +6,21 @@ import { cityByLanguage } from '../lib/db';
 import styles from '../lib/ui/home.module.css';
 import RoomCreationModal from './RoomCreationModal';
 import type { GameRoom } from '../types/index'; 
-import { Link } from 'lucide-react';
+import { 
+
+  AVAILABLE_LANGUAGES,
+  getLanguageWithFlag, 
+  isValidLanguage 
+} from '../lib/utils/languageHelper';
+import { useNavigate } from 'react-router-dom';
 
 type Language = keyof typeof cityByLanguage;
 
 type AuthMode = 'login' | 'register';
 
-// interface HeaderProps {
-//   room?: GameRoom;
-//   currentUser?: User
-// }
-
 export default function Header() {
-  const { language, setLanguage } = useLanguage();
+  const { gameLanguage, setGameLanguage } = useLanguage();
+  const navigate = useNavigate();
   const { user, isAuthenticated, login, logout, loading } = useAuth();
   const [showAuth, setShowAuth] = useState(false);
   const [authMode, setAuthMode] = useState<AuthMode>('login');
@@ -35,16 +35,6 @@ export default function Header() {
 
   const [showRoomCreation, setShowRoomCreation] = useState(false);
 
-  const languages: { code: Language; name: string }[] = [
-    { code: 'en', name: 'English' },
-    { code: 'es', name: 'Español' },
-    { code: 'fr', name: 'Français' },
-    { code: 'pt', name: 'Português' },
-    { code: 'cs', name: 'Čeština' },
-    { code: 'de', name: 'Deutsch' },
-    { code: 'ja', name: '日本語' },
-    { code: 'ar', name: 'العربية' },
-  ];
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -133,18 +123,20 @@ export default function Header() {
       return;
     }    // For now, just show an alert
     alert(`Room "${room.name}" created successfully!`);
-    if (room.id) {
-      console.log('🔗 Redirecting to room:', room.id);
-      // Use Next.js router to redirect
-      // router.push(`/game/${room.id}`);
-      // For now, show a link
-      const redirect = window.confirm(`Room created! Go to room "${room.name}"?`);
-      if (redirect && room.id) {
-        window.location.href = `/game/${room.id}`;
+    navigate(`/game/${room.id}`);
+    
+  };
+
+  const handleLanguageChange = (lang: string) => {
+      if (isValidLanguage(lang)) {
+        setGameLanguage(lang); 
       }
+    };
+
+    const joinRoomsList = () => {
+      console.log("Joining rooms list: ")
+      navigate('/rooms')
     }
-  }
-  ;
   
 
   return (
@@ -154,13 +146,13 @@ export default function Header() {
         <div className={styles.languageSection}>
           <span className={styles.languageLabel}>Language: </span>
           <select 
-            value={language} 
-            onChange={(e) => setLanguage(e.target.value as Language)}
+            value={gameLanguage} 
+            onChange={(e) => handleLanguageChange(e.target.value as Language)}
             className={styles.languageSelect}
           >
-            {languages.map((lang) => (
-              <option key={lang.code} value={lang.code}>
-                {lang.name}
+            {AVAILABLE_LANGUAGES.map((lang) => (
+              <option key={lang} value={lang}>
+                {getLanguageWithFlag(lang)}
               </option>
             ))}
           </select>
@@ -173,9 +165,9 @@ export default function Header() {
           ) : isAuthenticated ? (
           <div className={styles.userInfo}>
             <span>Welcome, {user?.username}! 👋</span>
-            <Link href="/rooms" className={styles.createRoomBtn}>
+            <button onClick={joinRoomsList} className={styles.createRoomBtn}>
               Join Rooms
-            </Link>
+            </button>
             <button 
               onClick={() => setShowRoomCreation(true)}
               className={styles.createRoomBtn}

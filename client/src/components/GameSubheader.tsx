@@ -1,52 +1,35 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useLanguage } from '../context/useLanguage';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/useAuth';
+import { apiClient } from '../lib/api-client';
+import type { GameRoom } from '../types/index';
+import { getLanguageWithFlag } from '../lib/utils/languageHelper';
 // import '../styles/GameSubheader.css';
 
-interface Player {
-  userId: string;
-  username: string;
-  score: number;
-  isReady: boolean;
-  isHost: boolean;
-}
-
-interface RoomInfo {
-  id: string;
-  name: string;
-  players: Player[];
-  maxPlayers: number;
-  status: 'waiting' | 'playing' | 'finished';
-  settings: {
-    language: string;
-  };
-}
 
 export default function GameSubheader() {
+  const {  gameLanguage } = useLanguage();
   const { roomId } = useParams<{ roomId: string }>();
   const { user } = useAuth();
-  const [room, setRoom] = useState<RoomInfo | null>(null);
+  const navigate = useNavigate();
+  const [room, setRoom] = useState<GameRoom | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
-  useEffect(() => {
-    if (!roomId) return;
+  const fetchRoomInfo = async () => {
+    if (!roomId || !user) return;
 
-    const fetchRoomInfo = async () => {
       try {
-        // TODO: Fetch room info from API
-        // For now, simulate with mock data
-        const mockRoom: RoomInfo = {
-          id: roomId,
-          name: 'Test Room',
-          players: [
-            { userId: '1', username: 'Host', score: 0, isReady: true, isHost: true },
-            { userId: user?.id || '2', username: user?.username || 'You', score: 0, isReady: false, isHost: false },
-          ],
-          maxPlayers: 4,
-          status: 'waiting',
-          settings: { language: 'en' }
-        };
-        setRoom(mockRoom);
+       setLoading(true);
+       const response = await apiClient.getRoom(roomId);
+
+       if(response.success && response.room){
+        setRoom(response.room);
+       } else {
+            setError(response.error || 'Failed to load room');
+            console.error('Room fetch error:', response.error);
+       }
       } catch (err) {
         console.error('Error fetching room info:', err);
       } finally {
@@ -54,16 +37,29 @@ export default function GameSubheader() {
       }
     };
 
+    useEffect(() => {
+    if (!roomId) {
+      navigate('/rooms'); 
+      return;
+    }
+
     fetchRoomInfo();
     
     // TODO: Set up WebSocket for real-time updates
     const wsInterval = setInterval(fetchRoomInfo, 5000);
     return () => clearInterval(wsInterval);
-  }, [roomId, user]);
+  }, [roomId, user, navigate]);
 
-  const handleReady = () => {
-    // TODO: Send ready status to server
-    console.log('Player ready');
+
+  const handleReady = async () => {
+    if (!roomId || !user) return;
+
+    try {
+        console.log('Player ready', user?.id);
+        await fetchRoomInfo();
+    } catch (error) {
+        console.error("Error setting ready: ", error)
+    }
   };
 
   const handleStartGame = () => {
@@ -71,36 +67,56 @@ export default function GameSubheader() {
     console.log('Starting game');
   };
 
-  const handleLeaveRoom = () => {
-    // TODO: Leave room
-    console.log('Leaving room');
-    window.location.href = '/rooms';
+  const handleLeaveRoom = async () => {
+    if (!roomId || !user) return;
+
+    try {
+        console.log('Leaving room');
+        await fetchRoomInfo();
+        navigate('/')
+    } catch (error) {
+        console.error("Error starting game: ", error)
+    }
   };
 
-  if (!roomId || loading) {
+
+  if (loading) {
     return <div className="subheader loading">Loading room info...</div>;
   }
 
-  const isHost = room?.players.some(p => p.userId === user?.id && p.isHost);
-  const currentPlayer = room?.players.find(p => p.userId === user?.id);
+  if (error || !room) {
+    return (
+      <div className="subheader error">
+        <p>Error: {error || 'Room not found'}</p>
+        <button onClick={() => navigate('/rooms')}>Back to Rooms</button>
+      </div>
+    );
+  }
+
+    const isHost = room.host === user?.id;
+    const currentPlayer = room.players.find(p => p.userId === user?.id);
+    const allReady = room.players.every(p => p.isReady || p.isHost);
 
   return (
     <div className="game-subheader">
       <div className="room-info-section">
-        <h3>{room?.name}</h3>
+        <h3>{room.name}</h3>
         <div className="room-meta">
-          <span className={`status-badge ${room?.status}`}>
-            {room?.status.toUpperCase()}
+          <span className={`status-badge ${room.status}`}>
+            {room.status.toUpperCase()}
           </span>
-          <span>👥 {room?.players.length}/{room?.maxPlayers}</span>
-          <span>🌐 {room?.settings.language.toUpperCase()}</span>
+          <span>👥 {room.players.length}/{room.maxPlayers}</span>
+          <div className="language-info">
+            <span>Game: {getLanguageWithFlag(gameLanguage)}</span>
+        </div>
+          {room.settings.isPrivate && <span>🔒 Private</span>}
         </div>
       </div>
 
       <div className="players-section">
         <h4>Players:</h4>
         <div className="players-list">
-          {room?.players.map(player => (
+          {room.players.map(player => (
             <div 
               key={player.userId} 
               className={`player-card ${player.userId === user?.id ? 'you' : ''} ${player.isHost ? 'host' : ''}`}
@@ -120,7 +136,7 @@ export default function GameSubheader() {
       </div>
 
       <div className="actions-section">
-        {room?.status === 'waiting' && (
+        {room.status === 'waiting' && (
           <>
             {!isHost && (
               <button 
@@ -135,12 +151,19 @@ export default function GameSubheader() {
               <button 
                 className="start-game-btn"
                 onClick={handleStartGame}
-                disabled={!room.players.every(p => p.isReady || p.isHost)}
+                disabled={!allReady}
               >
                 Start Game
               </button>
             )}
           </>
+        )}
+        
+        {room.status === 'playing' && (
+          <div className="game-status">
+            <span>Game in progress!</span>
+            <span>Turn: {room.gameState.currentTurn === user?.id ? 'Your turn!' : 'Waiting...'}</span>
+          </div>
         )}
         
         <button className="leave-room-btn" onClick={handleLeaveRoom}>

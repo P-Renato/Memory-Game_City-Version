@@ -22,11 +22,15 @@ class ApiClient {
     
     // Get token from localStorage if available
     const token = localStorage.getItem('token');
+    console.log('🔑 Token in API client:', token ? 'Present' : 'Missing');
     const headers = {
       ...this.defaultHeaders,
       ...(token && { Authorization: `Bearer ${token}` }),
       ...options.headers,
     };
+
+    console.log('📡 Making request to:', url);
+    console.log('Headers:', { ...headers, Authorization: 'Bearer ***' });
     
     const response = await fetch(url, {
       ...options,
@@ -93,7 +97,7 @@ class ApiClient {
       success: boolean;
       rooms?: GameRoom[];
       error?: string;
-    }>('/api/rooms/available');  // Changed from '/list' to '/available'
+    }>('/api/rooms/list'); 
   }
 
   // NEW: Join a room

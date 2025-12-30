@@ -5,6 +5,7 @@ import { loadAudioCache } from "../lib/utils/audioHelpers";
 import { initializeCards } from "../lib/utils/cardLogic";
 import type { AudioCache } from "../lib/audioCache";
 import { cityByLanguage } from "../lib/db"; 
+import type { Language } from "../lib/utils/languageHelper";
 
 type LanguageKey = keyof typeof cityByLanguage;
 export interface GameState {
@@ -17,7 +18,7 @@ export interface GameState {
   isGameComplete: boolean;
 }
 
-export function useMemoryGame(language: string) {
+export function useMemoryGame(language: Language) {
   const [gameState, setGameState] = useState<GameState>({
     cards: [],
     firstCard: null,

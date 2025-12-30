@@ -13,9 +13,9 @@ interface GameBoardProps {
 }
 
 export default function GameBoard({ room, isMultiplayer = false }: GameBoardProps) {
-  const { language } = useLanguage();
+  const { gameLanguage } = useLanguage();
   const { user, loading: authLoading } = useAuth();
-  const { gameState, handleCardClick } = useMemoryGame(language);
+  const { gameState, handleCardClick } = useMemoryGame(gameLanguage);
   
   const localUser = useMemo(() => user, [user]);
   

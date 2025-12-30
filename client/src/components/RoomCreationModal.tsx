@@ -1,9 +1,16 @@
 // components/RoomCreationModal.tsx - FIXED VERSION
 'use client';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import type { GameRoom } from '../types/index';
+import { useLanguage } from '../context/useLanguage';
 import { useAuth } from '../context/useAuth'; 
 import styles from '../lib/ui/home.module.css';
+import { 
+  AVAILABLE_LANGUAGES, 
+  getLanguageDisplayName,
+  getLanguageWithFlag, 
+  isValidLanguage 
+} from '../lib/utils/languageHelper';
 
 interface RoomCreationModalProps {
   isOpen: boolean;
@@ -16,15 +23,23 @@ export default function RoomCreationModal({
   onClose, 
   onRoomCreated,
 }: RoomCreationModalProps) {
+  const {  gameLanguage, setGameLanguage } = useLanguage();
   const { user, token } = useAuth(); 
   const [roomData, setRoomData] = useState({
     name: '',
     maxPlayers: 4,
-    language: 'en',
+    language: gameLanguage,
     isPrivate: false
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+
+  React.useEffect(() => {
+    setRoomData(prev => ({
+      ...prev,
+      language: gameLanguage
+    }));
+  }, [gameLanguage]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,6 +51,11 @@ export default function RoomCreationModal({
 
     if (!roomData.name.trim()) {
       setError('Room name is required');
+      return;
+    }
+
+    if (!isValidLanguage(roomData.language)) {
+      setError('Invalid language selected');
       return;
     }
 
@@ -77,7 +97,7 @@ export default function RoomCreationModal({
         setRoomData({
           name: '',
           maxPlayers: 4,
-          language: 'en',
+          language: gameLanguage,
           isPrivate: false
         });
       } else {
@@ -88,6 +108,13 @@ export default function RoomCreationModal({
       setError((error as Error).message);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleLanguageChange = (lang: string) => {
+    if (isValidLanguage(lang)) {
+      setRoomData(prev => ({ ...prev, language: lang }));
+      setGameLanguage(lang); // Update global game language
     }
   };
 
@@ -144,18 +171,15 @@ export default function RoomCreationModal({
               <select
                 id="language"
                 value={roomData.language}
-                onChange={(e) => setRoomData({ ...roomData, language: e.target.value })}
-                className={styles.formSelect}
+                 onChange={(e) => handleLanguageChange(e.target.value)}
+                  className={styles.formSelect}
                 disabled={loading}
               >
-                <option value="en">English</option>
-                <option value="es">Español</option>
-                <option value="fr">Français</option>
-                <option value="pt">Português</option>
-                <option value="cs">Čeština</option>
-                <option value="de">Deutsch</option>
-                <option value="ja">日本語</option>
-                <option value="ar">العربية</option>
+                {AVAILABLE_LANGUAGES.map(lang => (
+                  <option key={lang} value={lang}>
+                    {getLanguageWithFlag(lang)}
+                  </option>
+                ))}
               </select>
             </div>
             
@@ -192,7 +216,10 @@ export default function RoomCreationModal({
         )}
         
         <div className={styles.userInfo}>
-          <p>Creating room as: <strong>{user?.username || 'Not logged in'}</strong></p>
+          <p>Creating room as: <strong>{user?.username}</strong></p>
+          <small>
+            Game Language: <strong>{getLanguageDisplayName(roomData.language)}</strong> 
+          </small>
         </div>
       </div>
     </div>

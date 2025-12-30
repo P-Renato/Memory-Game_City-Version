@@ -15,8 +15,14 @@ export default function RoomsListPage() {
 
   const fetchRooms = async () => {
     try {
+      console.log('🔄 Fetching rooms...');
+      console.log('User:', user?.username);
+      console.log('Token from localStorage:', localStorage.getItem('token')?.substring(0, 20) + '...');
       setLoading(true);
       const response = await apiClient.getRoomsList();
+
+      console.log('📡 API Response:', response);
+      console.log('Rooms received:', response.rooms);
       if (response.success) {
         setRooms(response.rooms || []);
       } else {
@@ -51,11 +57,15 @@ export default function RoomsListPage() {
         return;
       }
 
-      // TODO: Call join room API
       console.log('Joining room:', roomId);
+      const response = await apiClient.joinRoom(roomId);
       
-      // For now, just navigate to game page with room ID
+      if (response.success && response.room) {
+      console.log('✅ Joined room:', response.room.id);
       navigate(`/game/${roomId}`);
+    } else {
+      alert(response.error || 'Failed to join room');
+    }
     } catch (err) {
       console.error('Error joining room:', err);
       alert('Failed to join room');

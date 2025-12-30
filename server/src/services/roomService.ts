@@ -1,5 +1,6 @@
 // server/services/roomService.ts
 import { getRoomsCollection } from '../db';
+import { type GameRoom } from '../types/types';
 
 // In-memory store for ACTIVE rooms
 const activeRooms = new Map<string, any>();
@@ -9,7 +10,7 @@ export class RoomService {
   static async createRoom(data: any): Promise<any> {
     const roomId = `room_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     
-    const room = {
+    const room: GameRoom = {
       id: roomId,
       name: data.name,
       host: data.userId,
@@ -49,7 +50,7 @@ export class RoomService {
 
     return room;
   }
-  
+
   // 1. Get ALL rooms (for admin/viewing all)
   static async getAllRooms(): Promise<any[]> {
     const roomsCollection = await getRoomsCollection();

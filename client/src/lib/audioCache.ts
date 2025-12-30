@@ -27,16 +27,6 @@ if (typeof window !== 'undefined') {
 
     audioCache[langKey] = {};
 
-  //   Object.keys(items).forEach((item) => {
-  //     if (availableAudios.includes(item)) {
-  //       const filePath = `/${item.replace(/\s+/g, '-')}_${langCode}.mp3`;
-  //       const audio = new Audio(filePath);
-  //       audioCache[langKey]![item] = audio;
-        
-  //       console.log(`Cached audio: ${item}_${langCode}.mp3`);
-  //     }
-  //   });
-  // });
   Object.keys(items).forEach((item) => {
       const normalized = item.replace(/\s+/g, '-');
       const filePath = `/${normalized}_${langCode}.mp3`;

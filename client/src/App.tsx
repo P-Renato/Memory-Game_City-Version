@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
 import GameBoard from './components/GameBoard';
 import RoomsListPage from './pages/RoomsListPage';
@@ -22,22 +22,11 @@ function App() {
           
           <main className={styles.mainContent}>
             <Routes>
-              {/* Home page redirects to rooms list */}
-              <Route path="/" element={<Navigate to="/rooms" replace />} />
-              
-              {/* Rooms listing page */}
+              <Route path="/" element={<GameBoard isMultiplayer={false} />} />
               <Route path="/rooms" element={<RoomsListPage />} />
-              
-              {/* Game page (with room ID) */}
               <Route 
                 path="/game/:roomId" 
                 element={<GameBoard isMultiplayer={true} />} 
-              />
-              
-              {/* Single player game (no room) */}
-              <Route 
-                path="/single-player" 
-                element={<GameBoard isMultiplayer={false} />} 
               />
               
               {/* Create room page - you might want to create this */}
