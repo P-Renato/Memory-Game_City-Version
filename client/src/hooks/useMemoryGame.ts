@@ -4,10 +4,11 @@ import { type Card, handleCardMatch } from "../lib/utils/cardLogic";
 import { loadAudioCache } from "../lib/utils/audioHelpers";
 import { initializeCards } from "../lib/utils/cardLogic";
 import type { AudioCache } from "../lib/audioCache";
-import { cityByLanguage } from "../lib/db"; 
+// import { cityByLanguage } from "../lib/db"; 
 import type { Language } from "../lib/utils/languageHelper";
+import { useGame } from "../context/useGame";
 
-type LanguageKey = keyof typeof cityByLanguage;
+// type LanguageKey = keyof typeof cityByLanguage;
 export interface GameState {
   cards: Card[];
   firstCard: number | null;
@@ -19,6 +20,7 @@ export interface GameState {
 }
 
 export function useMemoryGame(language: Language) {
+  const { playAudio } = useGame();
   const [gameState, setGameState] = useState<GameState>({
     cards: [],
     firstCard: null,
@@ -58,7 +60,12 @@ export function useMemoryGame(language: Language) {
 
   // Handle card click logic
   const handleCardClick = useCallback((cardIndex: number) => {
-    const { cards, firstCard, lockBoard, audioCache } = gameState;
+    const { 
+      cards, 
+      firstCard, 
+      lockBoard, 
+      // audioCache 
+    } = gameState;
     
     if (lockBoard) return;
 
@@ -66,17 +73,18 @@ export function useMemoryGame(language: Language) {
     if (card.flipped || card.matched) return;
 
     // Play audio
-    if (audioCache && audioCache[language as LanguageKey]?.[card.city]) {
-      const languageCache = audioCache[language as LanguageKey];
-      if (languageCache && languageCache[card.city]) {
-        const originalAudio = languageCache[card.city];
-        const audio = originalAudio.cloneNode() as HTMLAudioElement;
-        audio.currentTime = 0;
-        audio.play().catch(error => {
-          console.warn('Audio play failed:', error);
-        });
-      }
-    }
+    playAudio(card.city, language);
+    // if (audioCache && audioCache[language as LanguageKey]?.[card.city]) {
+    //   const languageCache = audioCache[language as LanguageKey];
+    //   if (languageCache && languageCache[card.city]) {
+    //     const originalAudio = languageCache[card.city];
+    //     const audio = originalAudio.cloneNode() as HTMLAudioElement;
+    //     audio.currentTime = 0;
+    //     audio.play().catch(error => {
+    //       console.warn('Audio play failed:', error);
+    //     });
+    //   }
+    // }
 
     // Flip the card
     const newCards = cards.map((c, i) => 
@@ -108,7 +116,7 @@ export function useMemoryGame(language: Language) {
         resetTurn();
       }, cards[firstCard].city === cards[cardIndex].city ? 600 : 1000);
     }
-  }, [gameState, language, resetTurn]);
+  }, [gameState, playAudio, language, resetTurn]);
 
   return {
     gameState,
