@@ -6,10 +6,12 @@ import { getImagePath } from "../lib/utils/gameHelpers";
 import { cityByLanguage } from "../lib/db";
 import { useAuth } from "../context/useAuth";
 import { useGame } from "../context/useGame";
+import { useNavigate } from 'react-router-dom';
 import type { GameRoom } from "../types/index";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback  } from "react";
 import { useWebSocket } from "../hooks/useWebSocket";
 import { useMemoryGame } from "../hooks/useMemoryGame";
+import { getUITranslation } from "../lib/translations/uiTranslations";
 // import { apiClient } from "../lib/api-client";
 
 interface GameBoardProps {
@@ -22,6 +24,7 @@ export default function GameBoard({ room: propRoom, isMultiplayer = false, onGam
   const { gameLanguage } = useLanguage();
   const { user } = useAuth();
   const { playAudio } = useGame();
+  const navigate = useNavigate();
 
   const { gameState: singlePlayerState, handleCardClick: handleSinglePlayerClick } = useMemoryGame(gameLanguage);
   
@@ -52,17 +55,7 @@ export default function GameBoard({ room: propRoom, isMultiplayer = false, onGam
           const updatedRoom = lastMessage.data.room;
           setCurrentRoom(updatedRoom);
           onGameUpdate?.(updatedRoom);
-          
-          // Check if we need to flip cards back (no match)
-          // if (updatedRoom.gameState?.flippedCards?.length === 0 && 
-          //     lastMessage.data.action === 'FLIP_CARD' &&
-          //     lastMessage.data.playerId !== user?.id) {
-          //   // Another player flipped cards that didn't match
-          //   // The server already cleared flippedCards, we need to wait and flip back
-          //   setTimeout(() => {
-          //     console.log('⏰ Flipping cards back after no match');
-          //   }, 1000);
-          // }
+
           if (lastMessage.data.action === 'CARD_FLIPPED' && 
               lastMessage.data.cardIndex !== undefined &&
               updatedRoom.gameState?.cards?.[lastMessage.data.cardIndex] &&
@@ -169,14 +162,6 @@ export default function GameBoard({ room: propRoom, isMultiplayer = false, onGam
     }
   }, [isMultiplayer, currentRoom, user, handleSinglePlayerClick, isFlipping, sendMessage, playAudio, gameLanguage]);
   
-  // Get translated city name
-  // const getTranslatedCityName = (cityKey: string): string => {
-  //   const langData = cityByLanguage[gameLanguage as keyof typeof cityByLanguage];
-  //   if (langData && langData.items && cityKey in langData.items) {
-  //   return langData.items[cityKey as keyof typeof langData.items];
-  // }
-  // return cityKey;
-  // };
   const getTranslatedCityName = useCallback((cityKey: string): string => {
     const langData = cityByLanguage[gameLanguage as keyof typeof cityByLanguage];
     
@@ -199,68 +184,58 @@ export default function GameBoard({ room: propRoom, isMultiplayer = false, onGam
   const displayIsGameComplete = isMultiplayer
     ? currentRoom?.gameState?.isGameComplete || false
     : singlePlayerState.isGameComplete;
-  
+
+    const resetGame = () => {
+      if (isMultiplayer && currentRoom) {
+        // For multiplayer, navigate back to rooms
+        navigate('/rooms');
+      } else {
+        // For single player, reset the game state
+        // You'll need to implement this in your useMemoryGame hook
+        // For example: resetGame();
+        window.location.reload(); // Fallback for now
+      }
+    };
+
   if (displayIsGameComplete) {
-    return (
-      <div className={styles.results}>
-        <h2>🎉 Game Complete! 🎉</h2>
-        {isMultiplayer && currentRoom && user && (
-          <div className={styles.multiplayerResults}>
-            <h3>Final Scores:</h3>
-            {currentRoom.players.map(player => (
-              <div key={player.userId} className={styles.playerScore}>
-                <span>{player.username}:</span>
-                <strong>{player.score} points</strong>
-                {player.userId === user.id && <span> (You)</span>}
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-    );
-  }
-  
   return (
-    <div className={styles.gameContainer}>
-      {/* Multiplayer Status Bar */}
+    <div className={styles.results}>
+      <h2>{getUITranslation(gameLanguage, 'gameComplete')}</h2>
       {isMultiplayer && currentRoom && user && (
-        <div className={styles.multiplayerStatus}>
-          <div className={styles.roomInfo}>
-            <span className={styles.roomName}>{currentRoom.name}</span>
-            <span className={`${styles.statusBadge} ${styles[currentRoom.status]}`}>
-              {currentRoom.status.toUpperCase()}
-            </span>
-            <span className={styles.websocketStatus}>
-              {isConnected ? '✅ WS' : '❌ WS'}
-            </span>
-          </div>
-          
-          <div className={styles.playersInfo}>
-            {currentRoom.status === 'playing' && (
-              <div className={styles.turnInfo}>
-                <span className={currentRoom.gameState?.currentTurn === user.id ? styles.yourTurn : ''}>
-                  {currentRoom.gameState?.currentTurn === user.id 
-                    ? "🎮 YOUR TURN" 
-                    : `${currentRoom.players.find(p => p.userId === currentRoom.gameState?.currentTurn)?.username || 'Someone'}'s turn`}
-                </span>
-              </div>
-            )}
-          </div>
-          
-          <div className={styles.scores}>
-            {currentRoom.players.map(player => (
-              <div 
-                key={player.userId} 
-                className={`${styles.playerScore} ${player.userId === user.id ? styles.currentPlayer : ''}`}
-              >
-                <span>{player.username}:</span>
-                <strong>{player.score}</strong>
-              </div>
-            ))}
-          </div>
+        <div className={styles.multiplayerResults}>
+          <h3>{getUITranslation(gameLanguage, 'finalScores')}</h3>
+          {currentRoom.players.map(player => (
+            <div key={player.userId} className={styles.playerScore}>
+              <span>{player.username}:</span>
+              <strong>{player.score} {getUITranslation(gameLanguage, 'points')}</strong>
+              {player.userId === user.id && (
+                <span>{getUITranslation(gameLanguage, 'youLabelShort')}</span>
+              )}
+            </div>
+          ))}
         </div>
       )}
       
+      <button 
+        onClick={resetGame}
+        className={styles.playAgainButton}
+      >
+        {getUITranslation(gameLanguage, 'playAgain')}
+      </button>
+      {isMultiplayer && (
+        <button 
+          onClick={() => navigate('/rooms')}
+          className={styles.backToRoomsButton}
+        >
+          {getUITranslation(gameLanguage, 'backToRooms')}
+        </button>
+      )}
+    </div>
+  );
+}
+  
+  return (
+    <div className={styles.gameContainer}>
       {/* Game Board */}
       <section 
         className={styles.boardTable}

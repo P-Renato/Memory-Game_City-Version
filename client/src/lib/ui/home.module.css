@@ -282,3 +282,358 @@
 .backButton:hover {
   background-color: #2563eb;
 }
+
+/* Multiplayer Status Bar Styles for Header */
+.multiplayerStatus {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 2rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  gap: 1rem;
+}
+
+.roomInfo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.roomName {
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.statusBadge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.statusBadge.waiting {
+  background: #FF9800;
+  color: white;
+}
+
+.statusBadge.playing {
+  background: #4CAF50;
+  color: white;
+}
+
+.statusBadge.finished {
+  background: #9C27B0;
+  color: white;
+}
+
+.playersInfo {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.turnInfo {
+  display: flex;
+  align-items: center;
+}
+
+.yourTurn {
+  color: #FFC107;
+  font-weight: 600;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.7; }
+  100% { opacity: 1; }
+}
+
+.scores {
+  display: flex;
+  gap: 1rem;
+  flex: 1;
+  justify-content: flex-end;
+}
+
+.playerScore {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+.playerScore.currentPlayer {
+  background: rgba(33, 150, 243, 0.3);
+  border: 1px solid rgba(33, 150, 243, 0.5);
+}
+
+.youLabel {
+  font-size: 0.8rem;
+  opacity: 0.8;
+  font-style: italic;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .multiplayerStatus {
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+  }
+  
+  .roomInfo, .playersInfo, .scores {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .scores {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+}
+
+
+/* GamePage Styles */
+.gamePageContainer {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.loadingContainer, .errorContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 2rem;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+.loadingContainer h2, .errorContainer h2 {
+  color: #333;
+  margin-bottom: 1rem;
+  font-size: 2rem;
+}
+
+.loadingContainer p, .errorContainer p {
+  color: #666;
+  font-size: 1.1rem;
+  max-width: 500px;
+  line-height: 1.5;
+}
+
+.errorContainer p {
+  color: #f44336;
+  font-weight: 500;
+  background: rgba(244, 67, 54, 0.1);
+  padding: 1rem;
+  border-radius: 8px;
+  margin: 1rem 0;
+}
+
+.backButton {
+  background: #2196F3;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: all 0.3s ease;
+}
+
+.backButton:hover {
+  background: #1976D2;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Header Button Styles */
+.userInfo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.welcomeMessage {
+  font-weight: 500;
+  margin-right: 0.25rem;
+}
+
+.navButton {
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.navButton:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateY(-1px);
+}
+
+.createRoomBtn {
+  background: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.createRoomBtn:hover {
+  background: #45a049;
+  transform: translateY(-1px);
+}
+
+.leaveRoomBtn {
+  background: #FF9800;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.leaveRoomBtn:hover:not(:disabled) {
+  background: #F57C00;
+  transform: translateY(-1px);
+}
+
+.leaveRoomBtn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.logoutBtn {
+  background: #f44336;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.logoutBtn:hover {
+  background: #d32f2f;
+  transform: translateY(-1px);
+}
+
+.loginBtn {
+  background: #2196F3;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem 1.2rem;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.loginBtn:hover {
+  background: #1976D2;
+  transform: translateY(-1px);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .userInfo {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+  
+  .welcomeMessage {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 0.5rem;
+  }
+}
+
+/* Add to your CSS file */
+.backToRoomsButton {
+  background: #2196F3;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 1rem;
+  margin-left: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.backToRoomsButton:hover {
+  background: #1976D2;
+  transform: translateY(-2px);
+}
+
+/* If you want the buttons side by side */
+.results button + button {
+  margin-left: 0.5rem;
+}
+
+/* Add to your CSS file */
+.results {
+  text-align: center;
+  padding: 2rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 10px;
+  margin: 2rem auto;
+  max-width: 600px;
+}
+
+.multiplayerResults {
+  margin: 1.5rem 0;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+}
+
+.playerScore {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0.5rem 0;
+  padding: 0.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+}
+
+.playAgainButton {
+  background: #4CAF50;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: all 0.3s ease;
+}
+
+.playAgainButton:hover {
+  background: #45a049;
+  transform: translateY(-2px);
+}

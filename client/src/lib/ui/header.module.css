@@ -1,0 +1,114 @@
+/* Multiplayer Status Bar Styles for Header */
+.multiplayerStatus {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 2rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  gap: 1rem;
+}
+
+.roomInfo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.roomName {
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.statusBadge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.statusBadge.waiting {
+  background: #FF9800;
+  color: white;
+}
+
+.statusBadge.playing {
+  background: #4CAF50;
+  color: white;
+}
+
+.statusBadge.finished {
+  background: #9C27B0;
+  color: white;
+}
+
+.playersInfo {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.turnInfo {
+  display: flex;
+  align-items: center;
+}
+
+.yourTurn {
+  color: #FFC107;
+  font-weight: 600;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.7; }
+  100% { opacity: 1; }
+}
+
+.scores {
+  display: flex;
+  gap: 1rem;
+  flex: 1;
+  justify-content: flex-end;
+}
+
+.playerScore {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+.playerScore.currentPlayer {
+  background: rgba(33, 150, 243, 0.3);
+  border: 1px solid rgba(33, 150, 243, 0.5);
+}
+
+.youLabel {
+  font-size: 0.8rem;
+  opacity: 0.8;
+  font-style: italic;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .multiplayerStatus {
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+  }
+  
+  .roomInfo, .playersInfo, .scores {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .scores {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+}
