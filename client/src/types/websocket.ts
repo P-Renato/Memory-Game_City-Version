@@ -14,6 +14,7 @@ export type WebSocketMessageType =
   | 'TURN_CHANGED'
   | 'GAME_UPDATE'
   | 'ROOM_STATE'
+  | 'ROOM_UPDATED'
   | 'GAME_OVER'
   | 'ERROR'
   | 'TEST'
@@ -66,13 +67,12 @@ export function isRoomUpdate(message: WebSocketMessage): message is WebSocketMes
   return message.type === 'GAME_STARTED' || 
          message.type === 'CARD_FLIPPED' ||
          message.type === 'CARD_MATCHED' ||
-         message.type === 'TURN_CHANGED' ||
-         message.type === 'GAME_COMPLETE';
+         message.type === 'TURN_CHANGED';
 }
 
-export function isChatMessage(message: WebSocketMessage): message is WebSocketMessage & { data: { message: string; userId: string; username: string } } {
-  return message.type === 'CHAT_MESSAGE';
-}
+// export function isChatMessage(message: WebSocketMessage): message is WebSocketMessage & { data: { message: string; userId: string; username: string } } {
+  // return message.type === 'CHAT_MESSAGE';
+// }
 
 export function isPlayerUpdate(message: WebSocketMessage): message is WebSocketMessage & { data: { player: GamePlayer } } {
   return message.type === 'PLAYER_JOINED' || 

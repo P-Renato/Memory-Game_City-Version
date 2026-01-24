@@ -11,17 +11,20 @@ import {
   getLanguageWithFlag, 
   isValidLanguage 
 } from '../lib/utils/languageHelper';
+import { getUITranslation, uiTranslations } from '../lib/translations/uiTranslations';
 
 interface RoomCreationModalProps {
   isOpen: boolean;
   onClose: () => void;
   onRoomCreated: (room: GameRoom) => void;
+  language: keyof typeof uiTranslations;
 }
 
 export default function RoomCreationModal({ 
   isOpen, 
   onClose, 
   onRoomCreated,
+  language,
 }: RoomCreationModalProps) {
   const {  gameLanguage, setGameLanguage } = useLanguage();
   const { user, token } = useAuth(); 
@@ -123,9 +126,11 @@ export default function RoomCreationModal({
   return (
     <div className={styles.modalOverlay} onClick={onClose}>
       <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
-        <button className={styles.modalClose} onClick={onClose}>×</button>
+        <button className={styles.modalClose} onClick={onClose}>
+          {getUITranslation(language, 'close')}
+        </button>
         
-        <h3>Create New Room</h3>
+        <h3>{getUITranslation(language, 'createNewRoom')}</h3>
         
         {error && (
           <div className={styles.errorMessage}>{error}</div>
@@ -133,16 +138,18 @@ export default function RoomCreationModal({
         
         {!user ? (
           <div className={styles.authRequired}>
-            <p>You must be logged in to create a room.</p>
+            <p>{getUITranslation(language, 'loginToCreateRoom')}</p>
           </div>
         ) : (
           <form onSubmit={handleSubmit}>
             <div className={styles.formGroup}>
-              <label htmlFor="roomName">Room Name</label>
+              <label htmlFor="roomName">
+                {getUITranslation(language, 'roomName')}
+              </label>
               <input
                 id="roomName"
                 type="text"
-                placeholder="Enter room name"
+                placeholder={getUITranslation(language, 'roomNamePlaceholder')}
                 value={roomData.name}
                 onChange={(e) => setRoomData({ ...roomData, name: e.target.value })}
                 required
@@ -152,7 +159,7 @@ export default function RoomCreationModal({
             </div>
             
             <div className={styles.formGroup}>
-              <label htmlFor="maxPlayers">Max Players (2-4)</label>
+              <label htmlFor="maxPlayers">{getUITranslation(language, 'maxPlayers')} (2-4)</label>
               <select
                 id="maxPlayers"
                 value={roomData.maxPlayers}
@@ -160,14 +167,16 @@ export default function RoomCreationModal({
                 className={styles.formSelect}
                 disabled={loading}
               >
-                <option value={2}>2 Players</option>
-                <option value={3}>3 Players</option>
-                <option value={4}>4 Players</option>
+                <option value={2}>{getUITranslation(language, 'players2')}</option>
+                <option value={3}>{getUITranslation(language, 'players3')}</option>
+                <option value={4}>{getUITranslation(language, 'players4')}</option>
               </select>
             </div>
             
             <div className={styles.formGroup}>
-              <label htmlFor="language">Game Language</label>
+              <label htmlFor="language">
+                {getUITranslation(language, 'gameLanguage')}
+              </label>
               <select
                 id="language"
                 value={roomData.language}
@@ -191,7 +200,7 @@ export default function RoomCreationModal({
                   onChange={(e) => setRoomData({ ...roomData, isPrivate: e.target.checked })}
                   disabled={loading}
                 />
-                Private Room (Requires invite)
+                {getUITranslation(language, 'privateRoom')} ({getUITranslation(language, 'requiresInvite')})
               </label>
             </div>
             
@@ -202,23 +211,26 @@ export default function RoomCreationModal({
                 className={styles.cancelButton}
                 disabled={loading}
               >
-                Cancel
+                {getUITranslation(language, 'cancel')}
               </button>
               <button
                 type="submit"
                 disabled={loading || !user}
                 className={styles.submitButton}
               >
-                {loading ? 'Creating...' : 'Create Room'}
+                {loading 
+                  ? getUITranslation(language, 'creating') 
+                  : getUITranslation(language, 'createRoomButton')}
               </button>
             </div>
           </form>
         )}
         
         <div className={styles.userInfo}>
-          <p>Creating room as: <strong>{user?.username}</strong></p>
+          <p>{getUITranslation(language, 'creatingAs')} <strong>{user?.username}</strong></p>
           <small>
-            Game Language: <strong>{getLanguageDisplayName(roomData.language)}</strong> 
+            {getUITranslation(language, 'gameLanguageLabel')}{' '}
+            <strong>{getLanguageDisplayName(roomData.language)}</strong> 
           </small>
         </div>
       </div>
