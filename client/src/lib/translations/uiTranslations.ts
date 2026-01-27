@@ -98,7 +98,8 @@ export type UITranslationKey =
   | 'startGame'
   | 'notReady'
   | 'failedToUpdateReady'
-  | 'failedToStartGame';
+  | 'failedToStartGame'
+  | 'memoryGame';
 
 export type UITranslations = {
   [key in LanguageCode]: {
@@ -178,7 +179,7 @@ export const uiTranslations: UITranslations = {
     multiplayerGame: 'Multiplayer Game',
     leaveRoom: 'Leave Room',
     leaving: 'Leaving...',
-    youLabelShort: ' (You)',
+    youLabelShort: ' You',
     availableRooms: 'Available Rooms',
     noRoomsAvailable: 'No rooms available.',
     beFirstToCreate: 'Be the first to create one!',
@@ -204,6 +205,7 @@ export const uiTranslations: UITranslations = {
     startGame: 'Start Game',
     failedToUpdateReady: 'Failed to update ready status',
     failedToStartGame: 'Failed to start game',
+    memoryGame: "Memory Game",
   },
   es: {
     welcome: '¡Bienvenido, {username}! 👋',
@@ -276,7 +278,7 @@ export const uiTranslations: UITranslations = {
     multiplayerGame: 'Juego Multijugador',
     leaveRoom: 'Salir de la Sala',
     leaving: 'Saliendo...',
-    youLabelShort: ' (Tú)',
+    youLabelShort: ' Tú',
     availableRooms: 'Salas Disponibles',
     noRoomsAvailable: 'No hay salas disponibles.',
     beFirstToCreate: '¡Sé el primero en crear una!',
@@ -302,6 +304,7 @@ export const uiTranslations: UITranslations = {
     startGame: 'Iniciar Juego',
     failedToUpdateReady: 'Error al actualizar estado de listo',
     failedToStartGame: 'Error al iniciar el juego',
+    memoryGame: "Juego de Memoria",
   },
   fr: {
     welcome: 'Bienvenue, {username} ! 👋',
@@ -374,7 +377,7 @@ export const uiTranslations: UITranslations = {
     multiplayerGame: 'Jeu Multijoueur',
     leaveRoom: 'Quitter la Salle',
     leaving: 'En train de quitter...',
-    youLabelShort: ' (Vous)',
+    youLabelShort: ' Vous',
     availableRooms: 'Salles Disponibles',
     noRoomsAvailable: 'Aucune salle disponible.',
     beFirstToCreate: 'Soyez le premier à en créer une !',
@@ -400,6 +403,7 @@ export const uiTranslations: UITranslations = {
     startGame: 'Démarrer le Jeu',
     failedToUpdateReady: 'Échec de la mise à jour du statut prêt',
     failedToStartGame: 'Échec du démarrage du jeu',
+    memoryGame: "Jeu de Mémoire",
   },
   de: {
     welcome: 'Willkommen, {username}! 👋',
@@ -472,7 +476,7 @@ export const uiTranslations: UITranslations = {
     multiplayerGame: 'Mehrspieler-Spiel',
     leaveRoom: 'Raum verlassen',
     leaving: 'Verlasse Raum...',
-    youLabelShort: ' (Sie)',
+    youLabelShort: ' Sie',
     availableRooms: 'Verfügbare Räume',
     noRoomsAvailable: 'Keine Räume verfügbar.',
     beFirstToCreate: 'Seien Sie der Erste, der einen erstellt!',
@@ -498,9 +502,10 @@ export const uiTranslations: UITranslations = {
     startGame: 'Spiel starten',
     failedToUpdateReady: 'Bereitschaftsstatus konnte nicht aktualisiert werden',
     failedToStartGame: 'Spiel konnte nicht gestartet werden',
+    memoryGame: "Memory-Spiel",
   },
   cs: {
-    welcome: 'Vítejte, {username}! 👋',
+    welcome: 'Vítej, {username}! 👋',
     joinRooms: 'Připojit se k Místnostem',
     createRoom: 'Vytvořit Místnost',
     logout: 'Odhlásit se',
@@ -570,7 +575,7 @@ export const uiTranslations: UITranslations = {
     multiplayerGame: 'Vícehráčová Hra',
     leaveRoom: 'Opustit Místnost',
     leaving: 'Opouštím...',
-    youLabelShort: ' (Ty)',
+    youLabelShort: ' Ty',
     availableRooms: 'Dostupné Místnosti',
     noRoomsAvailable: 'Žádné místnosti nejsou k dispozici.',
     beFirstToCreate: 'Buďte první, kdo jednu vytvoří!',
@@ -596,6 +601,7 @@ export const uiTranslations: UITranslations = {
     startGame: 'Spustit Hru',
     failedToUpdateReady: 'Nepodařilo se aktualizovat stav připravenosti',
     failedToStartGame: 'Nepodařilo se spustit hru',
+    memoryGame: "Pexeso",
   },
   pt: {
     welcome: 'Bem-vindo, {username}! 👋',
@@ -668,7 +674,7 @@ export const uiTranslations: UITranslations = {
     multiplayerGame: 'Jogo Multijogador',
     leaveRoom: 'Sair da Mesa',
     leaving: 'Saindo...',
-    youLabelShort: ' (Você)',
+    youLabelShort: ' Você',
     availableRooms: 'Salas Disponíveis',
     noRoomsAvailable: 'Nenhuma sala disponível.',
     beFirstToCreate: 'Seja o primeiro a criar uma!',
@@ -694,6 +700,7 @@ export const uiTranslations: UITranslations = {
     startGame: 'Iniciar Jogo',
     failedToUpdateReady: 'Falha ao atualizar estado de pronto',
     failedToStartGame: 'Falha ao iniciar o jogo',
+    memoryGame:  "Jogo da Memória",
   },
   ja: {
     welcome: 'ようこそ、{username}さん！👋',
@@ -766,7 +773,7 @@ export const uiTranslations: UITranslations = {
     multiplayerGame: 'マルチプレイヤーゲーム',
     leaveRoom: 'ルームを退出',
     leaving: '退出中...',
-    youLabelShort: ' (あなた)',
+    youLabelShort: ' あなた',
     availableRooms: '利用可能なルーム',
     noRoomsAvailable: '利用可能なルームはありません。',
     beFirstToCreate: '最初に作成しましょう！',
@@ -792,6 +799,7 @@ export const uiTranslations: UITranslations = {
     startGame: 'ゲーム開始',
     failedToUpdateReady: '準備状態の更新に失敗しました',
     failedToStartGame: 'ゲームの開始に失敗しました',
+    memoryGame:  "神経衰弱ゲーム",
   },
   ar: {
     welcome: 'مرحباً، {username}! 👋',
@@ -864,7 +872,7 @@ export const uiTranslations: UITranslations = {
     multiplayerGame: 'لعبة متعددة اللاعبين',
     leaveRoom: 'مغادرة الغرفة',
     leaving: 'جارٍ المغادرة...',
-    youLabelShort: ' (أنت)',
+    youLabelShort: ' أنت',
     availableRooms: 'الغرف المتاحة',
     noRoomsAvailable: 'لا توجد غرف متاحة.',
     beFirstToCreate: 'كن أول من ينشئ واحدة!',
@@ -889,21 +897,27 @@ export const uiTranslations: UITranslations = {
     notReady: 'غير مستعد',
     startGame: 'بدء اللعبة',
     failedToUpdateReady: 'فشل تحديث حالة الاستعداد',
-    failedToStartGame: 'فشل بدء اللعبة',
+    failedToStartGame: 'فشل بدء اللعبة',      
+    memoryGame:  "لعبة الذاكرة",                                                                                                                                                
   }
 };
-
+import { getPointsString } from './pointsTranslations';
 // Helper function to get translation with replacements
 export function getUITranslation(
   language: LanguageCode, 
   key: UITranslationKey, 
-  replacements?: Record<string, string>
+  replacements?: Record<string, string | number>
 ): string {
+   if (key === 'points' && replacements?.count !== undefined) {
+    return getPointsString(language, replacements.count as number);
+  }
   let translation = uiTranslations[language][key];
   
   if (replacements) {
     Object.entries(replacements).forEach(([placeholder, value]) => {
-      translation = translation.replace(`{${placeholder}}`, value);
+      if (placeholder !== 'count')  {
+        translation = translation.replace(`{${placeholder}}`, String(value));
+      }
     });
   }
   

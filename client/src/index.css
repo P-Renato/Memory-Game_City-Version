@@ -1,0 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Rye&display=swap&family=Courier+Prime:wght@400;700&family=Roboto:wght@300;400;500;700&display=swap');
+
+:root {
+  --font-body: "Roboto", sans-serif;
+  --font-mono: "Courier Prime", monospace;
+  --font-rye: "Rye", serif;
+
+  --color-primary: #5B86E5;
+  --color-text: #000000;
+}
