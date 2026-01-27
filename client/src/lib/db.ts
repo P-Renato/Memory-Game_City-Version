@@ -147,7 +147,7 @@ export const cityByLanguage: cities = {
       bus: 'Ônibus',
       car: 'Carro',
       castle: 'Castelo',
-      'fire-station': 'Estação de Bombeiros',
+      'fire-station': 'Corpo de Bombeiros',
       fountain: 'Fonte',
       hospital: 'Hospital',
       house: 'Casa',
@@ -159,7 +159,7 @@ export const cityByLanguage: cities = {
       street: 'Rua',
       subway: 'Metro',
       taxi: 'Táxi',
-      'traffic-light': 'Semáforo',
+      'traffic-light': 'Sinal de Trânsito',
       train: 'Trem'
     }
   },

@@ -623,7 +623,7 @@ export default function Header() {
                 <>
                   {getUITranslation(gameLanguage, 'haveAccount')}{' '}
                   <button type="button" onClick={switchToLogin} className={styles.linkButton}>
-                    {getUITranslation(gameLanguage, 'loginHere')}
+                    {getUITranslation(gameLanguage, 'loginHere')}                                                                                                                                                                                                                                                                                                                                                                                                                             
                   </button>
                 </>
               )}

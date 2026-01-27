@@ -12,6 +12,7 @@ import { useEffect, useState, useCallback  } from "react";
 import { useWebSocket } from "../hooks/useWebSocket";
 import { useMemoryGame } from "../hooks/useMemoryGame";
 import { getUITranslation } from "../lib/translations/uiTranslations";
+import { getPointsString } from '../lib/translations/pointsTranslations';
 // import { apiClient } from "../lib/api-client";
 
 interface GameBoardProps {
@@ -206,11 +207,12 @@ export default function GameBoard({ room: propRoom, isMultiplayer = false, onGam
           <h3>{getUITranslation(gameLanguage, 'finalScores')}</h3>
           {currentRoom.players.map(player => (
             <div key={player.userId} className={styles.playerScore}>
-              <span>{player.username}:</span>
-              <strong>{player.score} {getUITranslation(gameLanguage, 'points')}</strong>
-              {player.userId === user.id && (
+             
+              {player.userId === user.id ? (
                 <span>{getUITranslation(gameLanguage, 'youLabelShort')}</span>
-              )}
+              ) : ( <span>{player.username}:</span> )}
+              <strong> {getPointsString(gameLanguage, player.score)}</strong>
+              
             </div>
           ))}
         </div>
@@ -270,7 +272,10 @@ export default function GameBoard({ room: propRoom, isMultiplayer = false, onGam
               }}
             >
               <div className={styles.cardInner}>
-                <div className={styles.cardFront} />
+                <div className={styles.cardFront}>
+                  <p className={styles.cardText}>{getUITranslation(gameLanguage, 'memoryGame')}
+                  </p>
+                </div>  
                 <div
                   className={styles.cardBack}
                   style={{
@@ -279,6 +284,7 @@ export default function GameBoard({ room: propRoom, isMultiplayer = false, onGam
                     backgroundPosition: 'center',
                   }}
                 >
+ 
                   <p className={styles.cityName}>{getTranslatedCityName(card.city)}</p>
                 </div>
               </div>

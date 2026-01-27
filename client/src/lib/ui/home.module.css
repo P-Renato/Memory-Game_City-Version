@@ -1,8 +1,14 @@
 .boardTable {
-    width: 100%;
+    min-width: 100%;
+    min-width: 100%;
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     grid-template-rows: repeat(6, 1fr);
+    gap: 3em;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    padding-bottom: 3.8rem;
 }
 
 .card {
@@ -47,6 +53,26 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  
+}
+
+.cardText{
+  font-family: var(--font-rye);
+  color: #dba641;
+  margin: auto;
+  text-align: center;
+}
+
+.cityName{
+  font-family: var(--font-rye);
+  color: #dba641;
+  border: 2px solid #dba641;
+  background-color: #ffefae;
+  position: absolute;
+  top: 9.3em;
+  left: .6em;
+  padding: 0.3em;
+  border-radius: 5px;
 }
 
 .card.flipped .cardInner {
@@ -55,6 +81,8 @@
 
 .cardBack {
   transform: rotateY(180deg);
+  left: -.2em;
+
 }
 
 /* NEW: Sidebar and Modal Styles */
