@@ -220,6 +220,7 @@ export default function Header() {
       setAuthError((error as Error).message);
     }
   };
+  
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -376,6 +377,7 @@ export default function Header() {
           ) : (
             <div className={styles.guestInfo}>
               <button 
+                data-cy="login-open-btn"
                 onClick={() => setShowAuth(true)}
                 className={styles.loginBtn}
               >
@@ -515,8 +517,11 @@ export default function Header() {
             <h3>{getUITranslation(gameLanguage, authMode === 'login' ? 'login' : 'createAccount')}</h3>
             
             {authError && (
-              <div className={styles.errorMessage}>{authError}</div>
+              <div data-cy="login-error" className={styles.errorMessage}>
+                {authError}
+              </div>
             )}
+
             
             {/* Login Form */}
             {authMode === 'login' && (
@@ -525,6 +530,7 @@ export default function Header() {
                   type="text"
                   placeholder={getUITranslation(gameLanguage, 'usernameOrEmail')}
                   value={loginData.login}
+                  data-cy="login-username"
                   onChange={(e) => setLoginData({
                     ...loginData, 
                     login: e.target.value
@@ -537,6 +543,7 @@ export default function Header() {
                   type="password"
                   placeholder={getUITranslation(gameLanguage, 'password')}
                   value={loginData.password}
+                  data-cy="login-password"
                   onChange={(e) => setLoginData({
                     ...loginData, 
                     password: e.target.value
@@ -545,7 +552,7 @@ export default function Header() {
                   className={styles.authInput}
                 />
                 
-                <button type="submit" disabled={loading} className={styles.authButton}>
+                <button type="submit" data-cy="login-submit" disabled={loading} className={styles.authButton}>
                   {loading ? getUITranslation(gameLanguage, 'loggingIn') : getUITranslation(gameLanguage, 'login')}
                 </button>
               </form>
@@ -556,6 +563,7 @@ export default function Header() {
               <form onSubmit={handleRegister}>
                 <input
                   type="text"
+                  data-cy="register-username"
                   placeholder={getUITranslation(gameLanguage, 'usernameOrEmail')}
                   value={registerData.username}
                   onChange={(e) => setRegisterData({
@@ -569,6 +577,7 @@ export default function Header() {
                 <input
                   type="email"
                   placeholder="Email"
+                  data-cy="register-email"
                   value={registerData.email}
                   onChange={(e) => setRegisterData({
                     ...registerData, 
@@ -580,6 +589,7 @@ export default function Header() {
                 
                 <input
                   type="password"
+                  data-cy="register-password"
                   placeholder={getUITranslation(gameLanguage, 'password')}
                   value={registerData.password}
                   onChange={(e) => setRegisterData({
@@ -592,6 +602,7 @@ export default function Header() {
                 
                 <input
                   type="password"
+                  data-cy="register-password"
                   placeholder={getUITranslation(gameLanguage, 'confirmPassword')}
                   value={registerData.confirmPassword}
                   onChange={(e) => setRegisterData({
@@ -602,7 +613,7 @@ export default function Header() {
                   className={styles.authInput}
                 />
                 
-                <button type="submit" disabled={loading} className={styles.authButton}>
+                <button type="submit" disabled={loading} data-cy="register-open-btn" className={styles.authButton}>
                   {loading 
                     ? getUITranslation(gameLanguage, 'creatingAccount') 
                     : getUITranslation(gameLanguage, 'createAccount')}

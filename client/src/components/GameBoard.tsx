@@ -284,8 +284,16 @@ export default function GameBoard({ room: propRoom, isMultiplayer = false, onGam
                     backgroundPosition: 'center',
                   }}
                 >
+                  
  
-                  <p className={styles.cityName}>{getTranslatedCityName(card.city)}</p>
+                <p 
+                  className={`${styles.cityName} ${
+                    getTranslatedCityName(card.city).length < 4 ? styles.cityNameShort :
+                    getTranslatedCityName(card.city).length < 8 ? styles.cityNameMedium :
+                    styles.cityNameLong
+                  }`}
+                >
+                    {getTranslatedCityName(card.city)}</p>
                 </div>
               </div>
             </div>
