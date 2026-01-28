@@ -162,8 +162,8 @@ export default function RoomsListPage() {
                     </span>
                     <span>
                       {room.settings.isPrivate 
-                        ? '🔒 ' + getUITranslation(gameLanguage, 'privateRoom')
-                        : '🌐 ' + getUITranslation(gameLanguage, 'public')}
+                        ? ' 🔒 ' + getUITranslation(gameLanguage, 'privateRoom')
+                        : ' 🌐 ' + getUITranslation(gameLanguage, 'public')}
                     </span>
                   </div>
                   

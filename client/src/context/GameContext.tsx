@@ -1,5 +1,5 @@
 // client/src/context/GameContext.tsx
-import React, { createContext, useState, useCallback, type ReactNode } from 'react';
+import { createContext, useState, useCallback, type ReactNode } from 'react';
 import type { Card, GameRoom } from '../types/index';
 import { apiClient } from '../lib/api-client';
 import { playAudio as playAudioFromCache } from '../lib/audioCache';

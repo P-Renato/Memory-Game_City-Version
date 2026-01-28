@@ -1,0 +1,32 @@
+{
+  "name": "memory-game_city-version",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Running the first test\" && exit 1",
+    "client:dev": "npm --prefix client run dev",
+    "client:build": "npm --prefix client run build",
+    "client:preview": "npm --prefix client run preview",
+    "server:dev": "bun --cwd server run index.ts",
+    "e2e:open": "cypress open",
+    "e2e:run": "cypress run"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/P-Renato/Memory-Game_City-Version.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/P-Renato/Memory-Game_City-Version/issues"
+  },
+  "homepage": "https://github.com/P-Renato/Memory-Game_City-Version#readme",
+  "devDependencies": {
+    "@types/cypress": "^0.1.6",
+    "cypress": "^15.9.0",
+    "typescript": "^5.9.3"
+  }
+}

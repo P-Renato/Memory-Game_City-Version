@@ -60,7 +60,7 @@ class ApiClient {
     });
   }
 
-  async login(data: { email: string; password: string }) {
+  async login(data: { login: string; password: string }) {
     return this.request<{
       success: boolean;
       user?: { id: string; username: string; email: string; stats?: {gamesPlayed: number; wins: number; bestScore: number;}};
