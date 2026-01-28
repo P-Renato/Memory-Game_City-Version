@@ -655,7 +655,7 @@ export const uiTranslations: UITranslations = {
     roomStatusPlaying: 'JOGANDO',
     roomStatusFinished: 'TERMINADO',
     yourTurn: '🎮 SUA VEZ',
-    playersTurn: 'Vez de {player}',
+    playersTurn: 'Vez de {player} jogar',
     someonesTurn: 'Vez de alguém',
     scores: 'Pontuações:',
     player: 'Jogador',

@@ -73,6 +73,29 @@
   left: .6em;
   padding: 0.3em;
   border-radius: 5px;
+  text-align: center;
+}
+
+.cityNameShort {
+  left: 1.5em;
+  right: 1.5em;
+  text-align: center;
+}
+
+/* For medium length names */
+.cityNameMedium {
+  left: 0.3em;
+  right: 0.3em;
+  text-align: center;
+}
+
+/* For very long names */
+.cityNameLong {
+  font-size: 0.9em;
+  left: 0.2em;
+  right: 0.2em;
+  top: 10.3em;
+  text-align: center;
 }
 
 .card.flipped .cardInner {
@@ -109,6 +132,8 @@
   margin: 0 auto;
 }
 
+
+
 .languageSection {
   display: flex;
   align-items: center;
@@ -131,6 +156,8 @@
   display: flex;
   align-items: center;
   gap: 1rem;
+  margin-right: 3em;
+
 }
 
 
@@ -320,6 +347,7 @@
   background: rgba(0, 0, 0, 0.2);
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   gap: 1rem;
+  width: 60%;
 }
 
 .roomInfo {
@@ -369,9 +397,12 @@
 }
 
 .yourTurn {
-  color: #FFC107;
+  background-color: #FFC107;
   font-weight: 600;
   animation: pulse 2s infinite;
+  text-align: center;
+  border-radius: 8px;
+  padding: .6em;
 }
 
 @keyframes pulse {
@@ -424,6 +455,24 @@
     justify-content: center;
     flex-wrap: wrap;
   }
+  .gamePageContainer {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    min-width: 100vw;
+  }
+  .boardTable {
+    min-width: 100%;
+    min-width: 100%;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(7, 1fr);
+    gap: 3em;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    padding-bottom: 3.8rem;
+}
 }
 
 
