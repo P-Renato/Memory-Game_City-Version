@@ -45,24 +45,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const login = async (loginData: { login: string; password: string }) => {
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:3001/api/users/login', {
+      const apiUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001';
+      const response = await fetch(`${apiUrl}/api/users/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(loginData),
       });
 
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error);
-      }
-
       const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Login failed');
+      }
 
       if (result.success && result.user && result.token) {
         saveAuth(result.user, result.token);
       } else {
         throw new Error('Invalid response from server');
       }
+      return result;
     } catch (error) {
       throw new Error((error as Error).message || 'Login failed');
     } finally {
