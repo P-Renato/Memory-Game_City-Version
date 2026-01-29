@@ -104,7 +104,11 @@ export const registerUser = async ( req: Request, res: Response, next: NextFunct
 
 export const loginUser = async (req: Request, res: Response, next: NextFunction) => {
     try {
-    console.log('Login attempt:', req.body);
+    console.log('🔐 LOGIN ATTEMPT:', {
+      login: req.body.login,
+      password: req.body.password,
+      timestamp: new Date().toISOString()
+    });
     
     const { login, password }: LoginRequest = req.body;
 
@@ -120,6 +124,8 @@ export const loginUser = async (req: Request, res: Response, next: NextFunction)
     await connectToDatabase();
     const users = getUsersCollection();
 
+    console.log('🔍 Searching for user with login:', login);
+
     // 3. Find user by email
     const user = await users.findOne({ 
         $or: [
@@ -127,6 +133,15 @@ export const loginUser = async (req: Request, res: Response, next: NextFunction)
             { username: login }
         ]
      });
+    console.log('👤 User found:', user ? 'YES' : 'NO');
+    if (user) {
+      console.log('📋 User details:', {
+        id: user._id,
+        username: user.username,
+        email: user.email,
+        passwordHash: user.passwordHash ? 'SET' : 'MISSING'
+      });
+    }
     if (!user) {
       return res.status(401).json({
         success: false,
@@ -134,7 +149,20 @@ export const loginUser = async (req: Request, res: Response, next: NextFunction)
       });
     }
 
+    console.log('Found user:', user ? 'Yes' : 'No');
+    console.log('Login provided:', login);
+    console.log('Password provided:', password);
+
+    if (!user) {
+      console.log('User not found, returning 401');
+      return res.status(401).json({
+        success: false,
+        error: 'Invalid email or password'
+      });
+    }
+
     // 4. Check password
+    console.log('Stored hash:', user.passwordHash);
     const isPasswordValid = await bcrypt.compare(password, user.passwordHash);
     if (!isPasswordValid) {
       return res.status(401).json({
@@ -142,6 +170,8 @@ export const loginUser = async (req: Request, res: Response, next: NextFunction)
         error: 'Invalid email or password'
       });
     }
+    console.log('✅ Login successful for user:', user.username);
+    
 
     // 5. Generate JWT token
     const token = generateToken(
