@@ -10,7 +10,7 @@ const app = express();
 const server = createServer(app);
 
 app.use(cors({
-    origin: "http://localhost:5173",
+    origin: ["http://localhost:5173", "https://memory-game-city-version.onrender.com"],
     credentials: true
 }));
 
