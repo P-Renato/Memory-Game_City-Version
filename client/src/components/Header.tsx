@@ -22,6 +22,9 @@ import { useWebSocket } from '../hooks/useWebSocket';
 type Language = keyof typeof cityByLanguage;
 type AuthMode = 'login' | 'register';
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001';
+
+
 export default function Header() {
   const { gameLanguage, setGameLanguage } = useLanguage();
   const navigate = useNavigate();
@@ -187,7 +190,7 @@ export default function Header() {
       // Optional: Notify server
       if (roomId && user?.id) {
         try {
-          await fetch(`http://localhost:3001/api/rooms/${roomId}/leave`, {
+          await fetch(`${API_BASE_URL}/api/rooms/${roomId}/leave`, {
             method: 'POST',
             headers: { 
               'Content-Type': 'application/json',
@@ -213,7 +216,11 @@ export default function Header() {
     setAuthError('');
     
     try {
-      await login(loginData);
+      const response = await login(loginData);
+      if (!response.success) {
+      setAuthError(response.error || 'Login failed');
+      return;
+    }
       setShowAuth(false);
       setLoginData({ login: '', password: '' });
     } catch (error) {
@@ -238,7 +245,7 @@ export default function Header() {
     }
 
     try {
-      const response = await fetch('http://localhost:3001/api/users/register', {
+      const response = await fetch(`${API_BASE_URL}/api/users/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -370,7 +377,7 @@ export default function Header() {
               )}
               
               {/* Always show Logout */}
-              <button onClick={logout} className={styles.logoutBtn}>
+              <button onClick={logout} className={styles.logoutBtn} data-cy="logout-btn">
                 {getUITranslation(gameLanguage, 'logout')}
               </button>
             </div>
@@ -602,7 +609,7 @@ export default function Header() {
                 
                 <input
                   type="password"
-                  data-cy="register-password"
+                  data-cy="register-confirmPassword"
                   placeholder={getUITranslation(gameLanguage, 'confirmPassword')}
                   value={registerData.confirmPassword}
                   onChange={(e) => setRegisterData({
@@ -613,7 +620,7 @@ export default function Header() {
                   className={styles.authInput}
                 />
                 
-                <button type="submit" disabled={loading} data-cy="register-open-btn" className={styles.authButton}>
+                <button type="submit" disabled={loading} data-cy="register-submit" className={styles.authButton}>
                   {loading 
                     ? getUITranslation(gameLanguage, 'creatingAccount') 
                     : getUITranslation(gameLanguage, 'createAccount')}
@@ -626,14 +633,14 @@ export default function Header() {
               {authMode === 'login' ? (
                 <>
                   {getUITranslation(gameLanguage, 'noAccount')}{' '}
-                  <button type="button" onClick={switchToRegister} className={styles.linkButton}>
+                  <button type="button" onClick={switchToRegister} className={styles.linkButton} data-cy="switch-to-register">
                     {getUITranslation(gameLanguage, 'registerHere')}
                   </button>
                 </>
               ) : (
                 <>
                   {getUITranslation(gameLanguage, 'haveAccount')}{' '}
-                  <button type="button" onClick={switchToLogin} className={styles.linkButton}>
+                  <button type="button" onClick={switchToLogin} className={styles.linkButton} data-cy="switch-to-login">
                     {getUITranslation(gameLanguage, 'loginHere')}                                                                                                                                                                                                                                                                                                                                                                                                                             
                   </button>
                 </>
